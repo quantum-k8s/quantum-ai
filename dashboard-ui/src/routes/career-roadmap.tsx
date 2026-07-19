@@ -21,46 +21,9 @@ const LEVEL_TONE: Record<RoadmapLevel, { badge: "success" | "primary" | "warning
   Advanced: { badge: "warning", ring: "ring-warning/20" },
 };
 
-
 function Page() {
-
-const stored =
-  typeof window !== "undefined"
-    ? localStorage.getItem("resume_analysis")
-    : null;
-
-const analysis = stored ? JSON.parse(stored) : {};
-
-console.log(JSON.stringify(analysis, null, 2));
-
-const primaryRole = analysis?.career_prediction?.primary_role?.role
-  ?.trim()
-  .toLowerCase();
-
-console.log("Primary Role:", primaryRole);
-console.log("Recommendations:", analysis?.recommendations);
-  
-console.log(analysis?.career_prediction?.primary_role);
-console.log(primaryRole);
-console.log(ROLE_ROADMAPS.map(r => r.role));
-
-
-const orderedRoadmaps = [
-  ...ROLE_ROADMAPS.filter(
-    r => r.role.trim().toLowerCase() === primaryRole
-  ),
-  ...ROLE_ROADMAPS.filter(
-    r => r.role.trim().toLowerCase() !== primaryRole
-  ),
-];
-
-const [activeKey, setActiveKey] = useState(
-  orderedRoadmaps[0]?.key ?? ROLE_ROADMAPS[0].key
-);
-
-
-const active = orderedRoadmaps.find(r => r.key === activeKey) ?? orderedRoadmaps[0];
-  
+  const [activeKey, setActiveKey] = useState(ROLE_ROADMAPS[0].key);
+  const active = ROLE_ROADMAPS.find((r) => r.key === activeKey) ?? ROLE_ROADMAPS[0];
   const [openTopic, setOpenTopic] = useState<string | null>(`${active.levels[0].level}:${active.levels[0].topics[0].name}`);
 
   const totalTopics = active.levels.reduce((n, l) => n + l.topics.length, 0);
@@ -75,7 +38,7 @@ const active = orderedRoadmaps.find(r => r.key === activeKey) ?? orderedRoadmaps
 
       {/* Role tabs */}
       <div className="flex flex-wrap gap-2 mb-6">
-        {orderedRoadmaps.map((r) => (
+        {ROLE_ROADMAPS.map((r) => (
           <button
             key={r.key}
             onClick={() => setActiveKey(r.key)}

@@ -32,3 +32,13 @@ Thumbs.db
 
 # IDE
 .idea/
+
+# Backend Binary & Generated Files
+backend/*.db
+backend/*.pdf
+backend/scripts/__pycache__/
+backend/routers/__pycache__/
+backend/services/__pycache__/
+backend/core/__pycache__/
+backend/utils/__pycache__/
+backend/schemas/__pycache__/

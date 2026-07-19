@@ -1,4 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
+import { useNotifications } from "@/hooks/useNotifications";
 import {
   LayoutDashboard, FileText, ShieldCheck, Sparkles, Target, Route as RouteIcon,
   GraduationCap, PenLine, MessagesSquare, Bot, Briefcase, Bookmark, BarChart3,
@@ -54,7 +55,13 @@ const CANDIDATE_NAV: { group: string; items: NavItem[] }[] = [
     group: "Account",
     items: [
       { to: "/profile", label: "Profile", icon: User },
-      { to: "/notifications", label: "Notifications", icon: Bell },
+
+      {
+        to: "/notifications",
+        label: "Notifications",
+        icon: Bell,
+      },
+
       { to: "/settings", label: "Settings", icon: Settings },
     ],
   },
@@ -95,7 +102,12 @@ const RECRUITER_NAV: { group: string; items: NavItem[] }[] = [
     group: "Account",
     items: [
       { to: "/profile", label: "Profile", icon: Building2 },
-      { to: "/notifications", label: "Notifications", icon: Bell },
+
+      {
+        to: "/notifications",
+        label: "Notifications",
+        icon: Bell,
+      },
       { to: "/settings", label: "Settings", icon: Settings },
     ],
   },
@@ -106,6 +118,7 @@ export function Sidebar() {
   const groups = mode === "candidate" ? CANDIDATE_NAV : RECRUITER_NAV;
   const { location } = useRouterState();
   const pathname = location.pathname;
+  const { unreadCount } = useNotifications();
 
   return (
     <aside className="hidden lg:flex flex-col w-64 shrink-0 border-r border-border/60 bg-sidebar/60 backdrop-blur-xl sticky top-0 h-screen">
@@ -141,14 +154,27 @@ export function Sidebar() {
                       {active && <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full gradient-primary-bg" />}
                       <Icon className={cn("w-4 h-4 shrink-0", active ? "text-primary" : "text-muted-foreground group-hover:text-foreground")} />
                       <span className="flex-1 truncate">{it.label}</span>
-                      {it.badge && (
-                        <span className={cn(
-                          "text-[10px] px-1.5 py-0.5 rounded-md font-medium",
-                          it.badge === "AI" || it.badge === "Live"
-                            ? "bg-secondary/15 text-secondary"
-                            : "bg-white/[0.06] text-muted-foreground",
-                        )}>{it.badge}</span>
-                      )}
+
+
+                      {it.to === "/notifications" && unreadCount > 0 ? (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-red-500 text-white">
+                          {unreadCount}
+                        </span>
+                      ) : it.badge ? (
+                        <span
+                          className={cn(
+                            "text-[10px] px-1.5 py-0.5 rounded-md font-medium",
+                            it.badge === "AI" || it.badge === "Live"
+                              ? "bg-secondary/15 text-secondary"
+                              : "bg-white/[0.06] text-muted-foreground"
+                          )}
+                        >
+                          {it.badge}
+                        </span>
+                      ) : null}
+
+
+                  
                     </Link>
                   </li>
                 );
