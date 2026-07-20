@@ -3,18 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from database import Base, engine
-from routers import (
-    auth,
-    user_profile,
-    education,
-    experience,
-    certification,
-    dashboard,
-    notification,
-    interview,
-    resume,
-    jobs
-)
+from routers import auth, user_profile, education, experience, certification, dashboard, notification, interview, resume, jobs
 import logging
 
 # Configure Logging
@@ -70,16 +59,16 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 # Include Routers with exact root prefixes for absolute compatibility with frontend
-app.include_router(auth.router)
-app.include_router(user_profile.router)
-app.include_router(education.router)
-app.include_router(experience.router)
-app.include_router(certification.router)
-app.include_router(dashboard.router)
-app.include_router(notification.router)
-app.include_router(interview.router)
-app.include_router(resume.router)
-app.include_router(jobs.router)
+app.include_router(auth.router, prefix="/api")
+app.include_router(user_profile.router, prefix="/api")
+app.include_router(education.router, prefix="/api")
+app.include_router(experience.router, prefix="/api")
+app.include_router(certification.router, prefix="/api")
+app.include_router(dashboard.router, prefix="/api")
+app.include_router(notification.router, prefix="/api")
+app.include_router(interview.router, prefix="/api")
+app.include_router(resume.router, prefix="/api")
+app.include_router(jobs.router, prefix="/api")
 
 # Health Check Endpoint
 @app.get("/api/health", tags=["Health"])

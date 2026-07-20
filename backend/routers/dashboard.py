@@ -20,7 +20,8 @@ def dashboard(db: Session = Depends(get_db), current_user: User = Depends(get_cu
         "role": latest.detected_role,
         "skills": latest.skills.split(",") if latest.skills else [],
         "roadmap": latest.roadmap.split("\n") if latest.roadmap else [],
-        "suggestions": latest.ai_suggestions.split("\n") if latest.ai_suggestions else []
+        "suggestions": latest.ai_suggestions.split("\n") if latest.ai_suggestions else [],
+        "learning_roadmap": latest.learning_roadmap.split("\n") if latest.learning_roadmap else []
     }
 
 @router.get("/candidate-dashboard")
@@ -28,6 +29,7 @@ def candidate_dashboard(db: Session = Depends(get_db), current_user: User = Depe
     latest = db.query(Resume).filter(Resume.user_id == current_user.id).order_by(Resume.id.desc()).first()
     if not latest:
         return {
+            "stats": {"resumeScore": 0, "atsScore": 0, "jobMatches": 0, "skillCoverage": 0},
             "stats": {"resumeScore": 0, "atsScore": 0, "jobMatches": 0, "skillCoverage": 0},
             "aiInsights": [],
             "jobMatches": [],
@@ -67,5 +69,6 @@ def candidate_dashboard(db: Session = Depends(get_db), current_user: User = Depe
         "recentUploads": [
             {"id": latest.id, "name": latest.detected_role + " Resume", "size": f"{len(skills)} Skills", "when": "Latest", "score": latest.resume_score}
         ],
-        "interviews": []
+        "interviews": [],
+        "learning_roadmap": latest.learning_roadmap.split("\n") if latest.learning_roadmap else []
     }

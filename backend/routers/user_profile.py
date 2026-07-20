@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
 from models import User
+from schemas.user_profile import UserProfileUpdate
 from core.security import get_current_user
 
 router = APIRouter(tags=["Profile"])
@@ -27,7 +28,7 @@ def get_profile(id: int, db: Session = Depends(get_db)):
     }
 
 @router.put("/profile/{id}")
-def update_profile(id: int, data: dict, db: Session = Depends(get_db)):
+def update_profile(id: int, data: UserProfileUpdate, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == id).first()
     if not user:
         return {"success": False}

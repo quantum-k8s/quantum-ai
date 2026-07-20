@@ -44,10 +44,16 @@ async def upload_resume(
             temp_path = temp.name
 
         # Extract text
+        text = ""
         try:
+            # Attempt to extract text with pdfminer.six first
             text = extract_text(temp_path)
         except Exception as e:
-            text = str(content, 'utf-8', errors='ignore') # Fallback for non-pdf
+            # If PDF extraction fails, try as plain text
+            try:
+                text = content.decode("utf-8")
+            except UnicodeDecodeError:
+                text = content.decode("latin-1") # Fallback for other encodings
         finally:
             if os.path.exists(temp_path):
                 os.unlink(temp_path)
@@ -75,7 +81,8 @@ async def upload_resume(
             detected_role=role.title(),
             skills=",".join(ai_result.get("skills_found", [])),
             roadmap="\n".join(expected_skills),
-            ai_suggestions="\n".join(ai_suggestions)
+            ai_suggestions="\n".join(ai_suggestions),
+            learning_roadmap="\n".join(learning_roadmap)
         )
         db.add(resume)
         

@@ -45,6 +45,7 @@ class Resume(Base):
     skills = Column(Text)
     roadmap = Column(Text)
     ai_suggestions = Column(Text)
+    learning_roadmap = Column(Text)
 
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
