@@ -9,13 +9,18 @@ from sqlalchemy.orm import Session
 import database
 import models
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 def get_password_hash(password: str) -> str:
+    # Ensure password is not too long for bcrypt (max 72 bytes)
+    if isinstance(password, str):
+        password = password[:72]
+    else:
+        password = str(password)[:72]
     return pwd_context.hash(password)
 
 def create_access_token(subject: Union[str, Any], expires_delta: timedelta = None) -> str:

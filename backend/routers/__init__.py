@@ -6,6 +6,6 @@ from . import experience
 from . import certification
 from . import dashboard
 from . import notification
-from . import interview
+# from . import interview
 from . import resume
 from . import jobs

@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from database import Base, engine
-from routers import auth, user_profile, education, experience, certification, dashboard, notification, interview, resume, jobs
+from routers import auth, user_profile, education, experience, certification, dashboard, notification, resume, jobs
 import logging
 
 # Configure Logging
@@ -66,7 +66,7 @@ app.include_router(experience.router, prefix="/api")
 app.include_router(certification.router, prefix="/api")
 app.include_router(dashboard.router, prefix="/api")
 app.include_router(notification.router, prefix="/api")
-app.include_router(interview.router, prefix="/api")
+# app.include_router(interview.router, prefix="/api")
 app.include_router(resume.router, prefix="/api")
 app.include_router(jobs.router, prefix="/api")
 

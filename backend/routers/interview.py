@@ -3,13 +3,18 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import Resume
 from pydantic import BaseModel
-import google.generativeai as genai
+import google.genai as genai
 import os
 
 router = APIRouter(prefix="/interview", tags=["Interview"])
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
+# Initialize the generative AI model
+api_key = os.getenv("GEMINI_API_KEY")
+if api_key:
+    genai.configure(api_key=api_key)
+else:
+    # Use without API key for testing (will fail on actual API calls)
+    pass
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 
